@@ -68,3 +68,153 @@
 .sign-in:hover {
   opacity: 0.9;
 }
+
+/*hero section*/
+.hero {
+  min-height: calc(100vh - 70px);
+
+  padding: 80px 7%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 60px;
+
+  background: #ffffff;
+}
+
+/* Hero Left site*/
+
+.hero-content {
+  width: 50%;
+}
+
+.hero-small-title {
+  font-size: 14px;
+  font-weight: 700;
+
+  letter-spacing: 2px;
+
+  color: #e91e8c;
+
+  margin-bottom: 15px;
+}
+
+.hero-content h1 {
+  font-size: 70px;
+  line-height: 1.05;
+
+  color: #172033;
+
+  margin-bottom: 25px;
+}
+
+.hero-content h1 span {
+  background: linear-gradient(90deg, #f97316, #e91e8c, #7c3aed);
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-description {
+  max-width: 560px;
+
+  font-size: 18px;
+  line-height: 1.7;
+
+  color: #667085;
+
+  margin-bottom: 30px;
+}
+
+/* Hero Buttons */
+
+.hero-buttons {
+  display: flex;
+  align-items: center;
+
+  gap: 15px;
+}
+
+.explore-btn {
+  border: none;
+
+  padding: 13px 22px;
+
+  border-radius: 8px;
+
+  background: linear-gradient(135deg, #f97316, #e91e8c, #7c3aed);
+
+  color: white;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.learn-btn {
+  padding: 12px 22px;
+
+  border: 1px solid #dddddd;
+
+  border-radius: 8px;
+
+  background: white;
+
+  color: #333333;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.explore-btn:hover,
+.learn-btn:hover {
+  transform: translateY(-2px);
+
+  transition: 0.3s;
+}
+
+.hero-image {
+  width: 45%;
+
+  display: flex;
+  justify-content: center;
+}
+
+.code-box {
+  width: 100%;
+  max-width: 500px;
+
+  padding: 0;
+
+  overflow: hidden;
+
+  border-radius: 18px;
+
+  background: #111827;
+
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+}
+
+/* image */
+.hero {
+  min-height: auto;
+  padding-top: 20px;
+  align-items: flex;
+}
+.hero-image {
+  width: 45%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-image img {
+  width: 600px;
+  height: auto;
+  object-fit: contain;
+}

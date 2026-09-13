@@ -1,5 +1,6 @@
 import './App.css';
 import logo from './assets/logo-text.png';
+import heroImage from './assets/banner-stack.png';
 function App() {
   return (
     <>
@@ -23,6 +24,33 @@ function App() {
           <button className="sign-Up">Sign Up</button>
         </div>
       </nav>
+
+      <section className="hero">
+        <div className="hero-content">
+          <p className="hero-small-title">BUILD YOUR PERFECT</p>
+          <h1>
+            Developer
+            <br />
+            <span>Steck</span>
+          </h1>
+
+          <p className="hero-description">
+            Explore frontend, backend, database, and tooling options, customize
+            compare them side by side, and put together the stack that fits your
+            next project.
+          </p>
+
+          <div className="hero-buttons">
+            <button className="explore-btn">Explore Technologies</button>
+
+            <button className="learn-btn">Learn More</button>
+          </div>
+        </div>
+
+        <div className="hero-image">
+          <img className="hero-image" src={heroImage} alt="Hero" />
+        </div>
+      </section>
     </>
   );
 }
