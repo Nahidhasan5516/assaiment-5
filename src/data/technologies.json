@@ -91,13 +91,13 @@
   },
   {
     "id": 10,
-    "name": "Java",
-    "category": "Language",
-    "description": "A secure, object-oriented programming language designed for portability and scale.",
-    "icon": "☕",
-    "rating": 4.6,
-    "difficulty": "Intermediate",
-    "badge": "Robust"
+    "name": "Express.js",
+    "category": "Backend",
+    "description": "A fast, minimalist web framework for Node.js used to build web applications and APIs.",
+    "icon": "EX",
+    "rating": 4.7,
+    "difficulty": "Beginner-Friendly",
+    "badge": "Minimal"
   },
   {
     "id": 11,

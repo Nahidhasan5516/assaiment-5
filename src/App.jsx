@@ -3,17 +3,67 @@ import { useState } from 'react';
 import './App.css';
 
 import technologies from './data/technologies.json';
+
 import logo from './assets/logo-text.png';
 import heroImage from './assets/banner-stack.png';
+
+import {
+  SiReact,
+  SiVuedotjs,
+  SiSvelte,
+  SiNextdotjs,
+  SiNodedotjs,
+  SiExpress,
+  SiPostgresql,
+  SiRedis,
+  SiJavascript,
+  SiTypescript,
+  SiTailwindcss,
+  SiDocker,
+  SiOpenjdk,
+} from 'react-icons/si';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+// Technology Icon Map
+const iconMap = {
+  React: SiReact,
+  'Vue.js': SiVuedotjs,
+  Svelte: SiSvelte,
+  'Next.js': SiNextdotjs,
+  'Node.js': SiNodedotjs,
+  'Express.js': SiExpress,
+  PostgreSQL: SiPostgresql,
+  Redis: SiRedis,
+  JavaScript: SiJavascript,
+  TypeScript: SiTypescript,
+  Java: SiOpenjdk,
+  'Tailwind CSS': SiTailwindcss,
+  Docker: SiDocker,
+};
+
+// Individual Technology Colors
+const iconColorMap = {
+  React: '#61DAFB',
+  'Vue.js': '#42B883',
+  Svelte: '#FF3E00',
+  'Next.js': '#000000',
+  'Node.js': '#339933',
+  'Express.js': '#000000',
+  PostgreSQL: '#4169E1',
+  Redis: '#DC382D',
+  JavaScript: '#F7DF1E',
+  TypeScript: '#3178C6',
+  Java: '#EA2D2E',
+  'Tailwind CSS': '#06B6D4',
+  Docker: '#2496ED',
+};
+
 function App() {
-  // Selected technologies রাখার জন্য state
   const [stack, setStack] = useState([]);
 
-  // Technology add করার function
+  // Add Technology
   const addToStack = technology => {
     const alreadyAdded = stack.some(item => item.id === technology.id);
 
@@ -22,25 +72,23 @@ function App() {
       return;
     }
 
-    setStack([...stack, technology]);
+    setStack(previousStack => [...previousStack, technology]);
 
     toast.success(`${technology.name} added to your stack!`);
   };
 
-  // একটি technology remove করার function
+  // Remove One Technology
   const removeFromStack = id => {
     const removedTechnology = stack.find(item => item.id === id);
 
-    const updatedStack = stack.filter(item => item.id !== id);
-
-    setStack(updatedStack);
+    setStack(previousStack => previousStack.filter(item => item.id !== id));
 
     if (removedTechnology) {
       toast.info(`${removedTechnology.name} removed!`);
     }
   };
 
-  // সব technology remove করার function
+  // Remove All Technologies
   const removeAll = () => {
     if (stack.length === 0) {
       toast.info('Your stack is already empty!');
@@ -64,14 +112,19 @@ function App() {
           <a href="#" className="active">
             Home
           </a>
+
           <a href="#technologies">Technologies</a>
+
           <a href="#projects">Projects</a>
+
           <a href="#about">About</a>
+
           <a href="#contact">Contact</a>
         </div>
 
         <div className="nav-Buttons">
           <button className="sign-in">Sign In</button>
+
           <button className="sign-Up">Sign Up</button>
         </div>
       </nav>
@@ -104,7 +157,7 @@ function App() {
           </div>
         </div>
 
-        <div className="hero-image">
+        <div className="hero-image-container">
           <img
             className="hero-image"
             src={heroImage}
@@ -120,19 +173,37 @@ function App() {
             Explore the <span>Technologies</span>
           </h2>
 
-          <p>Pick technologies to build your ideal stack.</p>
+          <p>
+            Add any technologies you like — each one can be added only once.
+          </p>
         </div>
 
         <div className="technology-layout">
           {/* Technology Cards */}
           <div className="technology-grid">
             {technologies.map(technology => {
+              const Icon = iconMap[technology.name];
+
               const isAdded = stack.some(item => item.id === technology.id);
 
+              const iconColor = iconColorMap[technology.name] || '#64748b';
+
               return (
-                <div className="technology-card" key={technology.id}>
+                <div
+                  className={`technology-card ${
+                    isAdded ? 'selected-card' : ''
+                  }`}
+                  key={technology.id}
+                >
                   <div className="card-top">
-                    <div className="technology-icon">{technology.icon}</div>
+                    <div
+                      className="technology-icon"
+                      style={{
+                        color: iconColor,
+                      }}
+                    >
+                      {Icon ? <Icon /> : technology.icon}
+                    </div>
 
                     <span className="technology-badge">{technology.badge}</span>
                   </div>
@@ -151,7 +222,6 @@ function App() {
                     <span className="rating">⭐ {technology.rating}</span>
                   </div>
 
-                  {/* Add Button */}
                   <button
                     className={`add-btn ${isAdded ? 'added' : ''}`}
                     onClick={() => addToStack(technology)}
@@ -173,7 +243,6 @@ function App() {
               {stack.length === 1 ? 'Technology' : 'Technologies'} Selected
             </p>
 
-            {/* Empty State */}
             {stack.length === 0 ? (
               <div className="empty-stack">
                 <p>Your stack is empty.</p>
@@ -181,31 +250,41 @@ function App() {
                 <small>Add technologies to build your stack.</small>
               </div>
             ) : (
-              /* Selected Technologies */
               <div className="selected-tech-list">
-                {stack.map(technology => (
-                  <div className="selected-tech" key={technology.id}>
-                    <div className="selected-icon">{technology.icon}</div>
+                {stack.map(technology => {
+                  const Icon = iconMap[technology.name];
 
-                    <div>
-                      <strong>{technology.name}</strong>
+                  const iconColor = iconColorMap[technology.name] || '#64748b';
 
-                      <small>{technology.category}</small>
+                  return (
+                    <div className="selected-tech" key={technology.id}>
+                      <div
+                        className="selected-icon"
+                        style={{
+                          color: iconColor,
+                        }}
+                      >
+                        {Icon ? <Icon /> : technology.icon}
+                      </div>
+
+                      <div className="selected-tech-info">
+                        <strong>{technology.name}</strong>
+
+                        <small>{technology.category}</small>
+                      </div>
+
+                      <button
+                        className="remove-btn"
+                        onClick={() => removeFromStack(technology.id)}
+                      >
+                        ×
+                      </button>
                     </div>
-
-                    {/* Remove Button */}
-                    <button
-                      className="remove-btn"
-                      onClick={() => removeFromStack(technology.id)}
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
 
-            {/* Remove All Button */}
             <button className="remove-all" onClick={removeAll}>
               Remove All
             </button>
@@ -265,7 +344,7 @@ function App() {
         </div>
       </footer>
 
-      {/* Toast Notifications */}
+      {/* Toast Notification */}
       <ToastContainer position="top-right" autoClose={2000} theme="light" />
     </>
   );
