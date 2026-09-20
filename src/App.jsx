@@ -3,98 +3,47 @@ import { useState } from 'react';
 import './App.css';
 
 import technologies from './data/technologies.json';
-
 import logo from './assets/logo-text.png';
 import heroImage from './assets/banner-stack.png';
-
-import {
-  SiReact,
-  SiVuedotjs,
-  SiSvelte,
-  SiNextdotjs,
-  SiNodedotjs,
-  SiExpress,
-  SiPostgresql,
-  SiRedis,
-  SiJavascript,
-  SiTypescript,
-  SiTailwindcss,
-  SiDocker,
-  SiOpenjdk,
-} from 'react-icons/si';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-// Technology Icon Map
-const iconMap = {
-  React: SiReact,
-  'Vue.js': SiVuedotjs,
-  Svelte: SiSvelte,
-  'Next.js': SiNextdotjs,
-  'Node.js': SiNodedotjs,
-  'Express.js': SiExpress,
-  PostgreSQL: SiPostgresql,
-  Redis: SiRedis,
-  JavaScript: SiJavascript,
-  TypeScript: SiTypescript,
-  Java: SiOpenjdk,
-  'Tailwind CSS': SiTailwindcss,
-  Docker: SiDocker,
-};
-
-// Individual Technology Colors
-const iconColorMap = {
-  React: '#61DAFB',
-  'Vue.js': '#42B883',
-  Svelte: '#FF3E00',
-  'Next.js': '#000000',
-  'Node.js': '#339933',
-  'Express.js': '#000000',
-  PostgreSQL: '#4169E1',
-  Redis: '#DC382D',
-  JavaScript: '#F7DF1E',
-  TypeScript: '#3178C6',
-  Java: '#EA2D2E',
-  'Tailwind CSS': '#06B6D4',
-  Docker: '#2496ED',
-};
-
 function App() {
+  // Selected technologies রাখার জন্য state
   const [stack, setStack] = useState([]);
 
-  // Add Technology
+  // Technology add করার function
   const addToStack = technology => {
     const alreadyAdded = stack.some(item => item.id === technology.id);
 
+    // একই technology আবার add করা যাবে না
     if (alreadyAdded) {
-      toast.warning(`${technology.name} already added!`);
+      toast.warning(`${technology.name} is already added!`);
       return;
     }
 
-    setStack(previousStack => [...previousStack, technology]);
+    // নতুন technology stack-এ যোগ করা
+    setStack([...stack, technology]);
 
     toast.success(`${technology.name} added to your stack!`);
   };
 
-  // Remove One Technology
+  // একটি technology remove করার function
   const removeFromStack = id => {
     const removedTechnology = stack.find(item => item.id === id);
 
-    setStack(previousStack => previousStack.filter(item => item.id !== id));
+    const updatedStack = stack.filter(item => item.id !== id);
+
+    setStack(updatedStack);
 
     if (removedTechnology) {
       toast.info(`${removedTechnology.name} removed!`);
     }
   };
 
-  // Remove All Technologies
+  // সব technology remove করার function
   const removeAll = () => {
-    if (stack.length === 0) {
-      toast.info('Your stack is already empty!');
-      return;
-    }
-
     setStack([]);
 
     toast.info('All technologies removed!');
@@ -102,14 +51,15 @@ function App() {
 
   return (
     <>
-      {/* Navbar */}
+      {/* ================= NAVBAR ================= */}
+
       <nav className="navbar">
         <div className="logo">
-          <img src={logo} alt="Dev Stack" className="logo-image" />
+          <img src={logo} alt="Dev Stack logo" className="logo-image" />
         </div>
 
         <div className="nav-menu">
-          <a href="#" className="active">
+          <a href="#home" className="active">
             Home
           </a>
 
@@ -122,15 +72,16 @@ function App() {
           <a href="#contact">Contact</a>
         </div>
 
-        <div className="nav-Buttons">
+        <div className="nav-buttons">
           <button className="sign-in">Sign In</button>
 
-          <button className="sign-Up">Sign Up</button>
+          <button className="sign-up">Sign Up</button>
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section className="hero">
+      {/* ================= HERO SECTION ================= */}
+
+      <section id="home" className="hero">
         <div className="hero-content">
           <p className="hero-small-title">BUILD YOUR PERFECT</p>
 
@@ -141,9 +92,9 @@ function App() {
           </h1>
 
           <p className="hero-description">
-            Explore frontend, backend, database, and tooling options, customize,
-            compare them side by side, and put together the stack that fits your
-            next project.
+            Explore frontend, backend, database, and tooling options. Compare
+            different technologies and build the perfect stack for your next
+            project.
           </p>
 
           <div className="hero-buttons">
@@ -159,14 +110,15 @@ function App() {
 
         <div className="hero-image-container">
           <img
-            className="hero-image"
             src={heroImage}
             alt="Developer stack illustration"
+            className="hero-image"
           />
         </div>
       </section>
 
-      {/* Technologies Section */}
+      {/* ================= TECHNOLOGIES SECTION ================= */}
+
       <section id="technologies" className="technologies">
         <div className="section-heading">
           <h2>
@@ -174,19 +126,18 @@ function App() {
           </h2>
 
           <p>
-            Add any technologies you like — each one can be added only once.
+            Add any technologies you like. Each technology can be added only
+            once.
           </p>
         </div>
 
         <div className="technology-layout">
           {/* Technology Cards */}
+
           <div className="technology-grid">
             {technologies.map(technology => {
-              const Icon = iconMap[technology.name];
-
+              // Check করা হচ্ছে technology already added কি না
               const isAdded = stack.some(item => item.id === technology.id);
-
-              const iconColor = iconColorMap[technology.name] || '#64748b';
 
               return (
                 <div
@@ -199,10 +150,10 @@ function App() {
                     <div
                       className="technology-icon"
                       style={{
-                        color: iconColor,
+                        color: technology.color || '#64748b',
                       }}
                     >
-                      {Icon ? <Icon /> : technology.icon}
+                      {technology.icon}
                     </div>
 
                     <span className="technology-badge">{technology.badge}</span>
@@ -234,7 +185,8 @@ function App() {
             })}
           </div>
 
-          {/* Your Stack */}
+          {/* ================= YOUR STACK ================= */}
+
           <div className="your-stack">
             <h3>Your Stack</h3>
 
@@ -242,6 +194,8 @@ function App() {
               {stack.length}{' '}
               {stack.length === 1 ? 'Technology' : 'Technologies'} Selected
             </p>
+
+            {/* Stack empty থাকলে এই message দেখা যাবে */}
 
             {stack.length === 0 ? (
               <div className="empty-stack">
@@ -251,52 +205,53 @@ function App() {
               </div>
             ) : (
               <div className="selected-tech-list">
-                {stack.map(technology => {
-                  const Icon = iconMap[technology.name];
-
-                  const iconColor = iconColorMap[technology.name] || '#64748b';
-
-                  return (
-                    <div className="selected-tech" key={technology.id}>
-                      <div
-                        className="selected-icon"
-                        style={{
-                          color: iconColor,
-                        }}
-                      >
-                        {Icon ? <Icon /> : technology.icon}
-                      </div>
-
-                      <div className="selected-tech-info">
-                        <strong>{technology.name}</strong>
-
-                        <small>{technology.category}</small>
-                      </div>
-
-                      <button
-                        className="remove-btn"
-                        onClick={() => removeFromStack(technology.id)}
-                      >
-                        ×
-                      </button>
+                {stack.map(technology => (
+                  <div className="selected-tech" key={technology.id}>
+                    <div
+                      className="selected-icon"
+                      style={{
+                        color: technology.color || '#64748b',
+                      }}
+                    >
+                      {technology.icon}
                     </div>
-                  );
-                })}
+
+                    <div className="selected-tech-info">
+                      <strong>{technology.name}</strong>
+
+                      <small>{technology.category}</small>
+                    </div>
+
+                    <button
+                      className="remove-btn"
+                      onClick={() => removeFromStack(technology.id)}
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
               </div>
             )}
 
-            <button className="remove-all" onClick={removeAll}>
-              Remove All
-            </button>
+            {/* Stack-এ technology থাকলেই Remove All দেখা যাবে */}
+
+            {stack.length > 0 && (
+              <button className="remove-all" onClick={removeAll}>
+                Remove All
+              </button>
+            )}
           </div>
         </div>
       </section>
 
-      {/* Footer */}
+      {/* ================= FOOTER ================= */}
+
       <footer className="footer">
         <div className="footer-content">
+          {/* Footer Brand */}
+
           <div id="about" className="footer-brand">
-            <img src={logo} alt="Dev Stack" className="footer-logo" />
+            <img src={logo} alt="Dev Stack logo" className="footer-logo" />
 
             <p>
               Curated tools, technologies, and resources for developers building
@@ -305,46 +260,63 @@ function App() {
 
             <div className="social-links">
               <a href="#">GitHub</a>
+
               <a href="#">Twitter</a>
+
               <a href="#">LinkedIn</a>
             </div>
           </div>
 
+          {/* Product Links */}
+
           <div className="footer-column">
             <h4>PRODUCT</h4>
 
-            <a href="#">Home</a>
+            <a href="#home">Home</a>
+
             <a href="#technologies">Technologies</a>
+
             <a href="#projects">Projects</a>
           </div>
+
+          {/* Company Links */}
 
           <div id="contact" className="footer-column">
             <h4>COMPANY</h4>
 
             <a href="#about">About</a>
+
             <a href="#contact">Contact</a>
+
             <a href="#">Careers</a>
           </div>
+
+          {/* Legal Links */}
 
           <div className="footer-column">
             <h4>LEGAL</h4>
 
             <a href="#">Privacy Policy</a>
+
             <a href="#">Terms of Service</a>
           </div>
         </div>
+
+        {/* Footer Bottom */}
 
         <div className="footer-bottom">
           <p>© 2026 Dev Stack. All rights reserved.</p>
 
           <div>
             <a href="#">Privacy</a>
+
             <a href="#">Terms</a>
           </div>
         </div>
       </footer>
 
-      {/* Toast Notification */}
+      {/* Toast Message */}
+
       <ToastContainer position="top-right" autoClose={2000} theme="light" />
     </>
   );
