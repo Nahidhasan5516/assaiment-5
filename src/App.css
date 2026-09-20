@@ -736,3 +736,59 @@ button,
 a {
   transition: all 0.3s ease;
 }
+/* =========================
+   Empty Stack
+========================= */
+
+.empty-stack {
+  padding: 20px 5px;
+  text-align: center;
+}
+
+.empty-stack p {
+  margin-bottom: 8px;
+  color: #667085;
+  font-size: 11px;
+}
+
+.empty-stack small {
+  color: #98a2b3;
+  font-size: 8px;
+  line-height: 1.5;
+}
+
+/* =========================
+   Selected Technology List
+========================= */
+
+.selected-tech-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* =========================
+   Added Button
+========================= */
+
+.add-btn.added {
+  background: #12b76a;
+  color: #ffffff;
+  cursor: not-allowed;
+  opacity: 0.9;
+}
+
+.add-btn:disabled {
+  cursor: not-allowed;
+}
+
+/* =========================
+   Anchor Button Style
+========================= */
+
+.explore-btn,
+.learn-btn {
+  display: inline-block;
+  text-decoration: none;
+  text-align: center;
+}
