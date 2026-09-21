@@ -1,62 +1,113 @@
 import { useState } from 'react';
-
 import './App.css';
 
 import technologies from './data/technologies.json';
+
 import logo from './assets/logo-text.png';
 import heroImage from './assets/banner-stack.png';
 
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import {
+  SiReact,
+  SiVuedotjs,
+  SiSvelte,
+  SiNextdotjs,
+  SiNodedotjs,
+  SiExpress,
+  SiPostgresql,
+  SiRedis,
+  SiJavascript,
+  SiTypescript,
+  SiTailwindcss,
+  SiDocker,
+} from 'react-icons/si';
+
+const technologyIcons = {
+  React: SiReact,
+  'Vue.js': SiVuedotjs,
+  Svelte: SiSvelte,
+  'Next.js': SiNextdotjs,
+  'Node.js': SiNodedotjs,
+  'Express.js': SiExpress,
+  PostgreSQL: SiPostgresql,
+  Redis: SiRedis,
+  JavaScript: SiJavascript,
+  TypeScript: SiTypescript,
+  'Tailwind CSS': SiTailwindcss,
+  Docker: SiDocker,
+};
+
+const technologyColors = {
+  React: '#61DAFB',
+  'Vue.js': '#42B883',
+  Svelte: '#FF3E00',
+  'Next.js': '#111827',
+  'Node.js': '#68A063',
+  'Express.js': '#111827',
+  PostgreSQL: '#336791',
+  Redis: '#DC382D',
+  JavaScript: '#F7DF1E',
+  TypeScript: '#3178C6',
+  'Tailwind CSS': '#06B6D4',
+  Docker: '#2496ED',
+};
 
 function App() {
-  // Selected technologies রাখার জন্য state
   const [stack, setStack] = useState([]);
+  const [toast, setToast] = useState('');
 
-  // Technology add করার function
+  // Show toast message
+  const showToast = message => {
+    setToast(message);
+
+    setTimeout(() => {
+      setToast('');
+    }, 2500);
+  };
+
+  // Add a technology to the stack
   const addToStack = technology => {
     const alreadyAdded = stack.some(item => item.id === technology.id);
 
-    // একই technology আবার add করা যাবে না
     if (alreadyAdded) {
-      toast.warning(`${technology.name} is already added!`);
+      showToast(`${technology.name} is already in your stack.`);
       return;
     }
 
-    // নতুন technology stack-এ যোগ করা
-    setStack([...stack, technology]);
-
-    toast.success(`${technology.name} added to your stack!`);
+    setStack(previousStack => [...previousStack, technology]);
+    showToast(`${technology.name} added to your stack.`);
   };
 
-  // একটি technology remove করার function
-  const removeFromStack = id => {
-    const removedTechnology = stack.find(item => item.id === id);
+  // Remove one technology
+  const removeFromStack = technologyId => {
+    const removedTechnology = stack.find(item => item.id === technologyId);
 
-    const updatedStack = stack.filter(item => item.id !== id);
-
-    setStack(updatedStack);
+    setStack(previousStack =>
+      previousStack.filter(item => item.id !== technologyId)
+    );
 
     if (removedTechnology) {
-      toast.info(`${removedTechnology.name} removed!`);
+      showToast(`${removedTechnology.name} removed from your stack.`);
     }
   };
 
-  // সব technology remove করার function
+  // Remove all selected technologies
   const removeAll = () => {
     setStack([]);
+    showToast('All technologies removed from your stack.');
+  };
 
-    toast.info('All technologies removed!');
+  // Check whether a technology is already selected
+  const isSelected = technologyId => {
+    return stack.some(item => item.id === technologyId);
   };
 
   return (
     <>
-      {/* ================= NAVBAR ================= */}
-
+      {/* Navbar */}
       <nav className="navbar">
-        <div className="logo">
-          <img src={logo} alt="Dev Stack logo" className="logo-image" />
-        </div>
+        <a href="#home" className="logo">
+          <img src={logo} alt="Dev Stack Builder" className="logo-image" />
+        </a>
 
         <div className="nav-menu">
           <a href="#home" className="active">
@@ -74,27 +125,31 @@ function App() {
 
         <div className="nav-buttons">
           <button className="sign-in">Sign In</button>
-
           <button className="sign-up">Sign Up</button>
         </div>
       </nav>
 
-      {/* ================= HERO SECTION ================= */}
+      {/* Toast Notification */}
+      {toast && (
+        <div className="toast">
+          <span className="toast-icon">✓</span>
+          <span>{toast}</span>
+        </div>
+      )}
 
-      <section id="home" className="hero">
+      {/* Hero Section */}
+      <section className="hero" id="home">
         <div className="hero-content">
-          <p className="hero-small-title">BUILD YOUR PERFECT</p>
+          <p className="hero-small-title">BUILD YOUR PERFECT STACK</p>
 
           <h1>
-            Developer
-            <br />
-            <span>Stack</span>
+            Create Your
+            <span> Development Stack</span>
           </h1>
 
           <p className="hero-description">
-            Explore frontend, backend, database, and tooling options. Compare
-            different technologies and build the perfect stack for your next
-            project.
+            Explore modern technologies and build your own development stack
+            according to your project needs.
           </p>
 
           <div className="hero-buttons">
@@ -108,216 +163,179 @@ function App() {
           </div>
         </div>
 
-        <div className="hero-image-container">
-          <img
-            src={heroImage}
-            alt="Developer stack illustration"
-            className="hero-image"
-          />
+        <div className="hero-image">
+          <img src={heroImage} alt="Development stack" />
         </div>
       </section>
 
-      {/* ================= TECHNOLOGIES SECTION ================= */}
-
-      <section id="technologies" className="technologies">
+      {/* Technologies Section */}
+      <section className="technologies" id="technologies">
         <div className="section-heading">
           <h2>
-            Explore the <span>Technologies</span>
+            Explore <span>Technologies</span>
           </h2>
 
-          <p>
-            Add any technologies you like. Each technology can be added only
-            once.
-          </p>
+          <p>Choose the technologies you want to use in your project.</p>
         </div>
 
         <div className="technology-layout">
           {/* Technology Cards */}
-
           <div className="technology-grid">
             {technologies.map(technology => {
-              // Check করা হচ্ছে technology already added কি না
-              const isAdded = stack.some(item => item.id === technology.id);
+              const Icon = technologyIcons[technology.name];
+
+              const iconColor = technologyColors[technology.name] || '#64748B';
+
+              const selected = isSelected(technology.id);
 
               return (
-                <div
+                <article
                   className={`technology-card ${
-                    isAdded ? 'selected-card' : ''
+                    selected ? 'selected-card' : ''
                   }`}
                   key={technology.id}
                 >
                   <div className="card-top">
                     <div
                       className="technology-icon"
-                      style={{
-                        color: technology.color || '#64748b',
-                      }}
+                      style={{ color: iconColor }}
                     >
-                      {technology.icon}
+                      {Icon ? <Icon /> : '◇'}
                     </div>
 
-                    <span className="technology-badge">{technology.badge}</span>
+                    <span className="technology-badge">
+                      {technology.category}
+                    </span>
                   </div>
 
                   <h3>{technology.name}</h3>
 
                   <p className="technology-description">
-                    {technology.description}
+                    {technology.description ||
+                      'A useful technology for modern development projects.'}
                   </p>
 
                   <div className="technology-info">
-                    <span className="category">{technology.category}</span>
+                    {technology.difficulty && (
+                      <span className="difficulty">
+                        {technology.difficulty}
+                      </span>
+                    )}
 
-                    <span className="difficulty">{technology.difficulty}</span>
-
-                    <span className="rating">⭐ {technology.rating}</span>
+                    {technology.rating && (
+                      <span className="rating">⭐ {technology.rating}</span>
+                    )}
                   </div>
 
                   <button
-                    className={`add-btn ${isAdded ? 'added' : ''}`}
+                    className={`add-btn ${selected ? 'added' : ''}`}
                     onClick={() => addToStack(technology)}
-                    disabled={isAdded}
+                    disabled={selected}
                   >
-                    {isAdded ? '✓ Added to Stack' : '+ Add to Stack'}
+                    {selected ? '✓ Added to Stack' : 'Add to Stack'}
                   </button>
-                </div>
+                </article>
               );
             })}
           </div>
 
-          {/* ================= YOUR STACK ================= */}
+          {/* Your Stack Sidebar */}
+          <aside className="your-stack">
+            <div className="stack-header">
+              <h3>Your Stack</h3>
 
-          <div className="your-stack">
-            <h3>Your Stack</h3>
+              <span className="stack-number">{stack.length}</span>
+            </div>
 
             <p className="stack-count">
-              {stack.length}{' '}
-              {stack.length === 1 ? 'Technology' : 'Technologies'} Selected
+              {stack.length} Technology
+              {stack.length !== 1 ? 'ies' : 'y'} Selected
             </p>
-
-            {/* Stack empty থাকলে এই message দেখা যাবে */}
 
             {stack.length === 0 ? (
               <div className="empty-stack">
-                <p>Your stack is empty.</p>
+                <span className="empty-icon">＋</span>
 
-                <small>Add technologies to build your stack.</small>
+                <p>Your stack is empty</p>
+
+                <small>Add technologies from the list.</small>
               </div>
             ) : (
-              <div className="selected-tech-list">
-                {stack.map(technology => (
-                  <div className="selected-tech" key={technology.id}>
-                    <div
-                      className="selected-icon"
-                      style={{
-                        color: technology.color || '#64748b',
-                      }}
-                    >
-                      {technology.icon}
+              <div className="selected-list">
+                {stack.map(technology => {
+                  const Icon = technologyIcons[technology.name];
+
+                  const iconColor =
+                    technologyColors[technology.name] || '#64748B';
+
+                  return (
+                    <div className="selected-tech" key={technology.id}>
+                      <div
+                        className="selected-icon"
+                        style={{ color: iconColor }}
+                      >
+                        {Icon ? <Icon /> : '◇'}
+                      </div>
+
+                      <div className="selected-info">
+                        <strong>{technology.name}</strong>
+
+                        <small>{technology.category}</small>
+                      </div>
+
+                      <button
+                        className="remove-btn"
+                        onClick={() => removeFromStack(technology.id)}
+                        aria-label={`Remove ${technology.name}`}
+                      >
+                        ×
+                      </button>
                     </div>
-
-                    <div className="selected-tech-info">
-                      <strong>{technology.name}</strong>
-
-                      <small>{technology.category}</small>
-                    </div>
-
-                    <button
-                      className="remove-btn"
-                      onClick={() => removeFromStack(technology.id)}
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
-
-            {/* Stack-এ technology থাকলেই Remove All দেখা যাবে */}
 
             {stack.length > 0 && (
               <button className="remove-all" onClick={removeAll}>
                 Remove All
               </button>
             )}
-          </div>
+          </aside>
         </div>
       </section>
-
-      {/* ================= FOOTER ================= */}
-
+      {/* Footer */}
       <footer className="footer">
         <div className="footer-content">
-          {/* Footer Brand */}
-
-          <div id="about" className="footer-brand">
-            <img src={logo} alt="Dev Stack logo" className="footer-logo" />
-
-            <p>
-              Curated tools, technologies, and resources for developers building
-              modern software.
-            </p>
-
-            <div className="social-links">
-              <a href="#">GitHub</a>
-
-              <a href="#">Twitter</a>
-
-              <a href="#">LinkedIn</a>
-            </div>
+          <div className="footer-brand">
+            <img src={logo} alt="Dev Stack Builder" className="footer-logo" />
           </div>
 
-          {/* Product Links */}
-
           <div className="footer-column">
-            <h4>PRODUCT</h4>
-
-            <a href="#home">Home</a>
+            <h4>Product</h4>
 
             <a href="#technologies">Technologies</a>
 
             <a href="#projects">Projects</a>
           </div>
 
-          {/* Company Links */}
-
-          <div id="contact" className="footer-column">
-            <h4>COMPANY</h4>
+          <div className="footer-column">
+            <h4>Company</h4>
 
             <a href="#about">About</a>
 
             <a href="#contact">Contact</a>
-
-            <a href="#">Careers</a>
           </div>
-
-          {/* Legal Links */}
 
           <div className="footer-column">
-            <h4>LEGAL</h4>
+            <h4>Support</h4>
 
-            <a href="#">Privacy Policy</a>
+            <a href="#contact">Help Center</a>
 
-            <a href="#">Terms of Service</a>
-          </div>
-        </div>
-
-        {/* Footer Bottom */}
-
-        <div className="footer-bottom">
-          <p>© 2026 Dev Stack. All rights reserved.</p>
-
-          <div>
-            <a href="#">Privacy</a>
-
-            <a href="#">Terms</a>
+            <a href="#contact">Feedback</a>
           </div>
         </div>
       </footer>
-
-      {/* Toast Message */}
-
-      <ToastContainer position="top-right" autoClose={2000} theme="light" />
     </>
   );
 }
